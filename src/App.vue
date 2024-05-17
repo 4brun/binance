@@ -17,17 +17,20 @@ function setOrder(order: DepthStream) {
   if (order.u <= appStore.lastUpdateId) {
     return
   }
+  // If the quantity is 0, remove the price level.
   if (order.a && order.a[0][1] === '0') {
     order.a[0][0] = '0'
   }
   if (order.b && order.b[0][1] === '0') {
     order.b[0][0] = '0'
   }
-  console.log(order.U <= appStore.lastUpdateId + 1 && order.u >= appStore.lastUpdateId + 1)
+  // The first processed event should have U <= lastUpdateId+1 AND u >= lastUpdateId+1
   if (order.U <= appStore.lastUpdateId + 1 && order.u >= appStore.lastUpdateId + 1 && !appStore.orders.length) {
-    appStore.orders.push(order)
-  } else if (order.U + 1 === appStore.orders[appStore.orders.length - 1]?.u) {
-    appStore.orders.push(order)
+    appStore.orders = [order]
+  }
+  // While listening to the stream, each new event's U should be equal to the previous event's u+1.
+  else if (order.U === appStore.orders[appStore.orders.length - 1]?.u + 1) {
+    appStore.orders = [order]
   }
 }
 
