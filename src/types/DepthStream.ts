@@ -1,9 +1,9 @@
-interface DepthStream {
+export default interface DepthStream<T = string[][]> {
   e: string   // Event type
   E: number   // Event time
   s: string   // Symbol
   U: number   // First update ID in event
   u: number   // Final update ID in event
-  b: [string, string][]    // Bids to be updated
-  a: [string, string][]    // Asks to be updated
+  b: T        // Bids to be updated
+  a: T        // Asks to be updated
 }

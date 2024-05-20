@@ -1,17 +1,22 @@
 <template>
   <v-app-bar rounded>
-    <div class="w-100 d-flex align-center gap-2">
+    <div class="w-100 d-flex align-center">
       <router-link to="/">
-        <v-icon color="teal" class="mx-2">mdi-chart-bar</v-icon>
-        <span class="text-h6 text-decoration-none mr-2">binance</span>
+        <v-img
+          src="../assets/logo.png"
+          class="logo mx-2"
+          contain
+          height="50"
+          width="50"
+        />
       </router-link>
-      <v-btn small to="Settings">
+      <v-btn class="mx-1" small to="Settings" :icon="mobile">
         <v-icon left>mdi-cog</v-icon>
-        settings
+        <span v-show="!mobile">settings</span>
       </v-btn>
-      <v-btn small to="OrderBook">
+      <v-btn class="mx-1" small to="OrderBook" :icon="mobile">
         <v-icon left>mdi-chart-bar-stacked</v-icon>
-        order book
+        <span v-show="!mobile">order book</span>
       </v-btn>
     </div>
 
@@ -19,7 +24,17 @@
 </template>
 
 <script setup lang="ts">
+import {useDisplay} from "vuetify";
 
+const {mobile} = useDisplay()
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.logo {
+  transition: filter ease .5s;
+
+  &:hover {
+    filter: brightness(70%);
+  }
+}
+</style>
