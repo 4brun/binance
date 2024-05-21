@@ -45,7 +45,7 @@ const headers = [
 ]
 
 function onSelect() {
-  orderStore.lastUpdateId = 0
+  orderStore.snapshot = undefined
   orderStore.orders = []
   orderStore.getData()
 }
