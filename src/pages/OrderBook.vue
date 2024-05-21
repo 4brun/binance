@@ -61,7 +61,9 @@
               {{ item[1] }}
             </template>
             <template #item.total="{item}">
-              {{ item[0] * item[1] }}
+              <strong>
+                {{ item[0] * item[1] }}
+              </strong>
             </template>
           </v-data-table>
         </v-sheet>

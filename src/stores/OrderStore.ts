@@ -38,7 +38,7 @@ export const useOrderStore = defineStore('OrderStore', () => {
   }
 
   function processEvent(event: DepthStream) {
-    if (event.u <= orderBook.value.lastUpdateId) {
+    if (event.u <= orderBook.value?.lastUpdateId) {
       return
     }
     if (isNeedUpdate(event)) {
