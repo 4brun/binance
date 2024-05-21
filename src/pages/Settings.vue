@@ -5,7 +5,6 @@
       label="Валютная пара"
       :items="orderStore.symbolList"
       variant="outlined"
-      @update:modelValue="onSelect"
     />
 
     <v-sheet rounded>
@@ -43,12 +42,6 @@ const headers = [
     title: 'Время'
   }
 ]
-
-function onSelect() {
-  orderStore.snapshot = undefined
-  orderStore.orders = []
-  orderStore.getData()
-}
 
 </script>
 

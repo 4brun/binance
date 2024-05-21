@@ -3,7 +3,11 @@
     <v-row no-gutters>
       <v-col cols="12" md="6">
         <v-sheet class="ma-1 pa-1" rounded>
-          <span class="text-h6 px-2">Bids</span>
+          <span class="text-h6 px-2">Bids
+            <small class="text-disabled">
+            ({{ orderStore.currentSymbol }})
+            </small>
+          </span>
           <v-data-table
             :headers="headers"
             fixed-header
@@ -31,28 +35,31 @@
 
       <v-col cols="12" md="6">
         <v-sheet class="ma-1 pa-1" rounded>
-          <span class="text-h6 px-2">Asks</span>
-          <pre>{{ orderStore.orders }}</pre>
-          <!--          <v-data-table-->
-          <!--            :headers="headers"-->
-          <!--            fixed-header-->
-          <!--            fixed-footer-->
-          <!--            height="calc(100vh - 16rem)"-->
-          <!--            density="compact"-->
-          <!--            :items="orderStore.snapshot?.asks"-->
-          <!--            items-per-page="100"-->
-          <!--            :items-per-page-options="itemsPerPageOptions"-->
-          <!--          >-->
-          <!--            <template #item.price="{item}">-->
-          <!--              {{ item[0] }}-->
-          <!--            </template>-->
-          <!--            <template #item.quantity="{item}">-->
-          <!--              {{ item[1] }}-->
-          <!--            </template>-->
-          <!--            <template #item.total="{item}">-->
-          <!--              {{ item[0] * item[1] }}-->
-          <!--            </template>-->
-          <!--          </v-data-table>-->
+          <span class="text-h6 px-2">Asks
+            <small class="text-disabled">
+            ({{ orderStore.currentSymbol }})
+            </small>
+          </span>
+          <v-data-table
+            :headers="headers"
+            fixed-header
+            fixed-footer
+            height="calc(100vh - 16rem)"
+            density="compact"
+            :items="asks"
+            items-per-page="100"
+            :items-per-page-options="itemsPerPageOptions"
+          >
+            <template #item.price="{item}">
+              {{ item[0] }}
+            </template>
+            <template #item.quantity="{item}">
+              {{ item[1] }}
+            </template>
+            <template #item.total="{item}">
+              {{ item[0] * item[1] }}
+            </template>
+          </v-data-table>
         </v-sheet>
       </v-col>
     </v-row>
@@ -73,6 +80,7 @@ const orderStore = useOrderStore()
 
 const coin = computed(() => orderStore.currentSymbol.toLowerCase())
 const bids = computed(() => convertToArray(orderStore.orderBook?.bids))
+const asks = computed(() => convertToArray(orderStore.orderBook?.asks))
 
 const headers = computed<ITableHeader[]>(() => [
   {title: 'Price', value: 'price'},
@@ -93,9 +101,13 @@ function convertToArray(mapCollection?: Map<string, string>) {
   return [...mapCollection].map(([key, value]) => [key, value])
 }
 
-onMounted(async () => {
-  useWebSocket(coin.value, orderStore.processEvent)
-  await orderStore.getSnapshot()
+onMounted(() => {
+  const {socket} = useWebSocket(coin.value, orderStore.processEvent)
+
+  socket.value.onopen = async () => {
+    console.warn('[WebSocket] Open')
+    await orderStore.getSnapshot()
+  }
 })
 </script>
 

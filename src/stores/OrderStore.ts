@@ -28,16 +28,16 @@ export const useOrderStore = defineStore('OrderStore', () => {
     }
   }
 
+  function isNeedUpdate(event: DepthStream) {
+    return (event.U <= orderBook.value.lastUpdateId + 1 && event.u >= orderBook.value.lastUpdateId + 1)
+      || event.U === orderBook.value.lastUpdateId + 1
+  }
+
   function processEvent(event: DepthStream) {
     if (event.u <= orderBook.value.lastUpdateId) {
-      console.log(1)
       return
     }
-    if (event.U <= orderBook.value.lastUpdateId + 1 && event.u >= orderBook.value.lastUpdateId + 1) {
-      console.log(2)
-      updateOrderBook(event)
-    } else if (event.U === orderBook.value.lastUpdateId + 1) {
-      console.log(3)
+    if (isNeedUpdate(event)) {
       updateOrderBook(event)
     }
   }
