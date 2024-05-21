@@ -4,7 +4,8 @@
       v-model="orderStore.currentSymbol"
       label="Валютная пара"
       :items="orderStore.symbolList"
-      variant="outlined"
+      variant="solo-filled"
+      @update:modelValue="orderStore.orderBook = undefined"
     />
 
     <v-sheet rounded>
@@ -15,7 +16,7 @@
         height="calc(100vh - 18rem)"
         density="compact"
         :items="logsStore.logs"
-        items-per-page="100"
+        items-per-page="10"
       />
     </v-sheet>
   </v-container>

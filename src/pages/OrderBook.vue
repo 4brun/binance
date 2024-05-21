@@ -8,11 +8,13 @@
             ({{ orderStore.currentSymbol }})
             </small>
           </span>
+          <v-divider/>
           <v-data-table
             :headers="headers"
             fixed-header
             fixed-footer
-            height="calc(100vh - 16rem)"
+            :loading="orderStore.loader"
+            :height="`calc(${mobile ? 50 : 100}vh - ${mobile ? 14 : 16}rem)`"
             density="compact"
             :items="bids"
             items-per-page="100"
@@ -40,11 +42,13 @@
             ({{ orderStore.currentSymbol }})
             </small>
           </span>
+          <v-divider/>
           <v-data-table
             :headers="headers"
             fixed-header
             fixed-footer
-            height="calc(100vh - 16rem)"
+            :loading="orderStore.loader"
+            :height="`calc(${mobile ? 50 : 100}vh - ${mobile ? 14 : 16}rem)`"
             density="compact"
             :items="asks"
             items-per-page="100"

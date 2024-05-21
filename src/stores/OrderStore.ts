@@ -8,8 +8,10 @@ export const useOrderStore = defineStore('OrderStore', () => {
   const symbolList = ['BTCUSDT', 'BNBBTC', 'ETHBTC']
   const currentSymbol = ref('BTCUSDT')
   const orderBook = ref<OrderBook>()
+  const loader = ref(false)
 
   async function getSnapshot() {
+    loader.value = true
     await fetch(`https://api.binance.com/api/v3/depth?symbol=${currentSymbol.value}&limit=1000`)
       .then(async (res) => {
         if (res.ok) {
@@ -17,6 +19,8 @@ export const useOrderStore = defineStore('OrderStore', () => {
         }
       }).then(data => {
         orderBook.value = createOrderBook(data)
+      }).finally(() => {
+        loader.value = false
       })
   }
 
@@ -64,5 +68,5 @@ export const useOrderStore = defineStore('OrderStore', () => {
     orderBook.value = newOrderBook
   }
 
-  return {symbolList, currentSymbol, getSnapshot, orderBook, processEvent}
+  return {symbolList, currentSymbol, getSnapshot, orderBook, processEvent, loader}
 })
